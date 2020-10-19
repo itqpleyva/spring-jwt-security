@@ -8,7 +8,7 @@ public class SpringJwtSecurityApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringJwtSecurityApplication.class, args);
-		System.out.println("Hola mundo");
+		System.out.println("-----------------------I am inside of the monster----------------------");
 	}
 
 }
