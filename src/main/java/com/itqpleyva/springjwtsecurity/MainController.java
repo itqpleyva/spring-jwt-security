@@ -3,6 +3,7 @@ package com.itqpleyva.springjwtsecurity;
 import com.itqpleyva.springjwtsecurity.JwtManagement.Jwt;
 import com.itqpleyva.springjwtsecurity.Models.AuthenticationRequest;
 import com.itqpleyva.springjwtsecurity.Models.AuthenticationResponse;
+import com.itqpleyva.springjwtsecurity.Models.TokenValidrequest;
 import com.itqpleyva.springjwtsecurity.Services.MyUserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+
 
 
 @RestController
@@ -50,11 +53,28 @@ public class MainController {
             
             throw new Exception("username or password incorrect");
         }
-    
+
         final UserDetails userDetails = myuserdatilService.loadUserByUsername(authrequest.getUser());
         final String token = jwt.generateToken(userDetails);
 
         return new ResponseEntity<>(new AuthenticationResponse(token), HttpStatus.OK);
+    }
+    
+    @GetMapping(value="/valid_token")
+    public Boolean isValidToken(@RequestBody TokenValidrequest token_request )throws Exception {
+
+        boolean isvalid = false;
+
+        UserDetails user = myuserdatilService.loadUserByUsername(token_request.getUsername());
+
+            try {
+               isvalid = jwt.validateToken(token_request.getToken(), user);
+
+            } catch (Exception e) {
+
+                return isvalid;
+            }
+             return isvalid;
     }
     
 }
